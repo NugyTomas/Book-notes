@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User</title>
+    <link rel="stylesheet" href="./styles/new.css">
+</head>
+
+<body>
+    <h1>Add a new book</h1>
+
+    <form action="/new" method="post">
+        <p>What is the title of the book?</p>
+        <input type="text" name="title">
+        <p>How much would you recommend this book out of 10?</p>
+        <select type="text" name="recommend">
+            <% for(let i=1; i<11; i++){ %>
+                <option value="<%=i%>">
+                    <%=i%>
+                </option>
+                <% } %>
+        </select>
+        <p>When did you read this book?</p>
+        <input type="date" name="read_date">
+        <p>Describe the book by your own words.</p>
+        <input type="text" name="description">
+        <p>Link to the book reviews from other people.</p>
+        <input type="text" name="link">
+        <p>ISBN of the book that you read.</p>
+        <input type="text" name="isbn">
+        <button>Add</button>
+    </form>
+</body>

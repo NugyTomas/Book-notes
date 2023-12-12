@@ -1,0 +1,105 @@
+<%- include('partials/header.ejs'); -%>
+
+    <h1>A Website that helps you to store your thoughts about books you read, so your brain does not have to.</h1>
+
+    <form class="add" action="/add" method="post">
+        <button>Add a new book</button>
+    </form>
+
+    <% for(let book of listOfBooks){%>
+        <article class="book_info">
+
+            <button id="edit<%=book.id%>" class="edit" onclick="handler('<%=book.id%>')"><img class="icon"
+                    src="/assets/icons/pencil-solid.svg" alt="pencil image"></button>
+
+            <form class="edit" action="/edit" method="post">
+
+                <h1 hidden="true" id="hiddenDescription">Hello</h1>
+
+                <input type="hidden" name="updatedItemId" value="<%= book.id %>">
+
+                <input id="titleInput<%=book.id%>" type="text" name="updatedItemTitle" value="<%= book.title %>"
+                    autocomplete="off" hidden="true" />
+
+                <select id="recommendationInput<%=book.id%>" name="updatedItemRecommendation"
+                    value="<%= book.recommendation %>" hidden="true">
+                    <% for(let i=1; i<11; i++){ %>
+                        <option <% if(i==book.recommendation){ %>
+                            selected <% } %>
+                                value="<%=i%>" >
+                                    <%=i%>
+                        </option>
+                        <% } %>
+                </select>
+
+
+                <input id="isbnInput<%=book.id%>" type="text" name="updatedIsbn" value="<%= book.isbn %>"
+                    autocomplete="off" hidden="true" />
+
+                <input id="dateInput<%=book.id%>" type="date" name="updatedDate"
+                    value="<%=new Intl.DateTimeFormat('fr-CA').format(book.read_date) %>" autocomplete="off"
+                    hidden="true" />
+
+                <input id="descriptionInput<%=book.id%>" type="text" name="updatedDescription"
+                    value="<%= book.description %>" autocomplete="off" hidden="true" />
+
+                <input id="linkInput<%=book.id%>" type="text" name="updatedLink" value="<%= book.link %>"
+                    autocomplete="off" hidden="true" />
+
+                <button id="done<%=book.id%>" class="edit" type="submit" hidden><img class="icon"
+                        src="/assets/icons/check-solid.svg" alt="tick image"></button>
+
+            </form>
+
+
+            <img id="isbn<%=book.id%>" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg"
+                alt="book_cover">
+            <div>
+                <h1 id="title<%=book.id %>">
+                    <%=book.title%>
+                </h1>
+                <div>
+                    <h2 id="recommendation<%=book.id%>">
+                        Personal recommendation: <%= book.recommendation%>/10
+                    </h2>
+                    <%# Intl.DateTimeFormat formats the date from Postgres to JS%>
+                        <h2 id="date<%=book.id %>">
+                            Date read: <%= new Intl.DateTimeFormat('en-GB').format(book.read_date) %>
+                        </h2>
+                </div>
+                <p id="description<%=book.id%>">
+                    <%=book.description%>
+                </p>
+                <p id="link<%=book.id%>">You can check details and reviews from other people over <a
+                        href="<%= book.link  %>">here</a></p>
+
+            </div>
+
+
+
+
+        </article>
+        <% } %>
+
+            <script>
+                function handler(id) {
+                    document.getElementById("hiddenDescription").removeAttribute("hidden")
+                    document.getElementById("title" + id).setAttribute("hidden", true)
+                    document.getElementById("recommendation" + id).setAttribute("hidden", true)
+                    document.getElementById("isbn" + id).setAttribute("hidden", true)
+                    document.getElementById("date" + id).setAttribute("hidden", true)
+                    document.getElementById("description" + id).setAttribute("hidden", true)
+                    document.getElementById("link" + id).setAttribute("hidden", true)
+                    document.getElementById("edit" + id).setAttribute("hidden", true)
+                    document.getElementById("done" + id).removeAttribute("hidden")
+                    document.getElementById("titleInput" + id).removeAttribute("hidden")
+                    document.getElementById("recommendationInput" + id).removeAttribute("hidden")
+                    document.getElementById("isbnInput" + id).removeAttribute("hidden")
+                    document.getElementById("dateInput" + id).removeAttribute("hidden")
+                    document.getElementById("descriptionInput" + id).removeAttribute("hidden")
+                    document.getElementById("linkInput" + id).removeAttribute("hidden")
+                }
+            </script>
+
+
+            <%- include('partials/footer.ejs'); -%>
