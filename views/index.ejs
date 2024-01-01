@@ -1,6 +1,39 @@
 <%- include('partials/header.ejs'); -%>
+    <div class="heading-container">
+        <h1 class="title">Book Notes</h1>
+        <h2>A Website that helps you to store your thoughts about books you read, so your brain does not have to.</h1>
+    </div>
 
-    <h1>A Website that helps you to store your thoughts about books you read, so your brain does not have to.</h1>
+    <div class="dropdown">
+        <button class="dropbtn">Sort by</button>
+        <div class="dropdown-content">
+            <div class="dropdown-flex">
+                <a href="/sortedByTitleAsc">Title<img class="dropdown-icon" src="/assets/icons/down-md-svgrepo-com.svg"
+                        alt="vector-down-icon"></a>
+            </div>
+            <div class="dropdown-flex">
+                <a href="/sortedByTitleDesc">Title<img class="dropdown-icon" src="/assets/icons/up-sm-svgrepo-com.svg"
+                        alt="vector-up-icon"></a>
+            </div>
+            <div class="dropdown-flex">
+                <a href="/sortedByDateReadAsc">Read Date<img class="dropdown-icon"
+                        src="/assets/icons/down-md-svgrepo-com.svg" alt="vector-down-icon"></a>
+            </div>
+            <div class="dropdown-flex">
+                <a href="/sortedByDateReadDesc">Read Date<img class="dropdown-icon"
+                        src="/assets/icons/up-sm-svgrepo-com.svg" alt="vector-down-icon"></a>
+            </div>
+            <div class="dropdown-flex">
+                <a href="/sortedByDateAdded">Added<img class="dropdown-icon" src="/assets/icons/down-md-svgrepo-com.svg"
+                        alt="vector-up-icon"></a>
+            </div>
+            <div class="dropdown-flex">
+                <a href="/">Added<img class="dropdown-icon" src="/assets/icons/up-sm-svgrepo-com.svg"
+                        alt="vector-down-icon"></a>
+            </div>
+        </div>
+    </div>
+
 
     <form class="add" action="/add" method="post">
         <button>Add a new book</button>
@@ -9,97 +42,101 @@
     <% for(let book of listOfBooks){%>
         <article class="book_info">
 
-            <button id="edit<%=book.id%>" class="edit" onclick="handler('<%=book.id%>')"><img class="icon"
-                    src="/assets/icons/pencil-solid.svg" alt="pencil image"></button>
-
-            <form class="edit" action="/edit" method="post">
-
-                <h1 hidden="true" id="hiddenDescription">Hello</h1>
-
-                <input type="hidden" name="updatedItemId" value="<%= book.id %>">
-
-                <input id="titleInput<%=book.id%>" type="text" name="updatedItemTitle" value="<%= book.title %>"
-                    autocomplete="off" hidden="true" />
-
-                <select id="recommendationInput<%=book.id%>" name="updatedItemRecommendation"
-                    value="<%= book.recommendation %>" hidden="true">
-                    <% for(let i=1; i<11; i++){ %>
-                        <option <% if(i==book.recommendation){ %>
-                            selected <% } %>
-                                value="<%=i%>" >
-                                    <%=i%>
-                        </option>
-                        <% } %>
-                </select>
-
-
-                <input id="isbnInput<%=book.id%>" type="text" name="updatedIsbn" value="<%= book.isbn %>"
-                    autocomplete="off" hidden="true" />
-
-                <input id="dateInput<%=book.id%>" type="date" name="updatedDate"
-                    value="<%=new Intl.DateTimeFormat('fr-CA').format(book.read_date) %>" autocomplete="off"
-                    hidden="true" />
-
-                <input id="descriptionInput<%=book.id%>" type="text" name="updatedDescription"
-                    value="<%= book.description %>" autocomplete="off" hidden="true" />
-
-                <input id="linkInput<%=book.id%>" type="text" name="updatedLink" value="<%= book.link %>"
-                    autocomplete="off" hidden="true" />
-
-                <button id="done<%=book.id%>" class="edit" type="submit" hidden><img class="icon"
-                        src="/assets/icons/check-solid.svg" alt="tick image"></button>
-
-            </form>
-
-
-            <img id="isbn<%=book.id%>" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg"
-                alt="book_cover">
-            <div>
-                <h1 id="title<%=book.id %>">
-                    <%=book.title%>
-                </h1>
-                <div>
-                    <h2 id="recommendation<%=book.id%>">
-                        Personal recommendation: <%= book.recommendation%>/10
-                    </h2>
-                    <%# Intl.DateTimeFormat formats the date from Postgres to JS%>
-                        <h2 id="date<%=book.id %>">
-                            Date read: <%= new Intl.DateTimeFormat('en-GB').format(book.read_date) %>
-                        </h2>
+            <div class="section_split">
+                <div class="book_cover_side">
+                    <img id="isbn<%=book.id%>" src="https://covers.openlibrary.org/b/isbn/<%= book.isbn %>-M.jpg"
+                        alt="book_cover">
                 </div>
-                <p id="description<%=book.id%>">
-                    <%=book.description%>
-                </p>
-                <p id="link<%=book.id%>">You can check details and reviews from other people over <a
-                        href="<%= book.link  %>">here</a></p>
+
+                <div class="book_info_side">
+                    <h1 id="title<%=book.id %>">
+                        <%=book.title%>
+                    </h1>
+
+                    <h3 id="recommendation<%=book.id%>">
+                        Personal recommendation: <%= book.recommendation%>/5
+                    </h3>
+
+                    <%# Intl.DateTimeFormat formats the date from Postgres to JS%>
+                        <h3 id="date<%=book.id %>">
+                            Date read: <%= new Intl.DateTimeFormat('en-GB').format(book.read_date) %>
+                        </h3>
+
+                        <h3 id="description<%=book.id%>">
+                            Description: <span class="h3-styling"><%=book.description%></span>
+                        </h3>
+
+                        <p id="link<%=book.id%>"><span class="p-styling">You</span> can check details and reviews from other people over <a
+                                href="<%= book.link  %>">here</a></p>
+                </div>
+
+                <button id="edit<%=book.id%>" class="edit" onclick="handler('<%=book.id%>')"><img class="icon"
+                        src="/assets/icons/pencil-solid.svg" alt="pencil image"></button>
+
+                <%#Onsubmit will trigger when the user tries to submit the form, and it will RETURN if the user clicked
+                    OK or Cancel.%>
+                    <form class="delete" onsubmit="return confirm('Are you sure you want to delete this book?');"
+                        action="/delete" method="post">
+                        <input type="hidden" name="itemId" value="<%= book.id %>">
+                        <button id="delete<%=book.id%>" class="edit" type="submit">
+                            <img class="icon" src="/assets/icons/trash-solid.svg" alt="tick image"></button>
+                    </form>
 
             </div>
+            <hr>
+            <%#Hidden inputs that shows up after clicking edit pencil.%>
+                <form class="edit" action="/edit" method="post" autocomplete="off">
 
+                    <div id="hiddenInputs<%=book.id%>" hidden="true">
 
+                        <input type="hidden" name="itemId" value="<%= book.id %>">
+                        <p>Title of the book:</p>
+                        <input type="text" name="updatedItemTitle" value="<%= book.title %>" />
+                        <select name="updatedItemRecommendation" value="<%= book.recommendation %>">
+                            <% for(let i=0; i<6; i++){ %>
+                                <option <% if(i==book.recommendation){ %>
+                                    selected <% } %>
+                                        value="<%=i%>" >
+                                            <%=i%>
+                                </option>
+                                <% } %>
+                        </select>
+
+                        <input type="text" name="updatedIsbn" value="<%= book.isbn %>" />
+
+                        <input type="date" name="updatedDate"
+                            value="<%=new Intl.DateTimeFormat('fr-CA').format(book.read_date) %>" />
+
+                        <input type="text" name="updatedDescription" value="<%= book.description %>" />
+
+                        <input type="text" name="updatedLink" value="<%= book.link %>" />
+
+                        <button id="done<%=book.id%>" class="edit" type="submit" hidden><img class="icon"
+                                src="/assets/icons/check-solid.svg" alt="tick image"></button>
+                    </div>
+
+                </form>
 
 
         </article>
         <% } %>
 
-            <script>
-                function handler(id) {
-                    document.getElementById("hiddenDescription").removeAttribute("hidden")
-                    document.getElementById("title" + id).setAttribute("hidden", true)
-                    document.getElementById("recommendation" + id).setAttribute("hidden", true)
-                    document.getElementById("isbn" + id).setAttribute("hidden", true)
-                    document.getElementById("date" + id).setAttribute("hidden", true)
-                    document.getElementById("description" + id).setAttribute("hidden", true)
-                    document.getElementById("link" + id).setAttribute("hidden", true)
-                    document.getElementById("edit" + id).setAttribute("hidden", true)
-                    document.getElementById("done" + id).removeAttribute("hidden")
-                    document.getElementById("titleInput" + id).removeAttribute("hidden")
-                    document.getElementById("recommendationInput" + id).removeAttribute("hidden")
-                    document.getElementById("isbnInput" + id).removeAttribute("hidden")
-                    document.getElementById("dateInput" + id).removeAttribute("hidden")
-                    document.getElementById("descriptionInput" + id).removeAttribute("hidden")
-                    document.getElementById("linkInput" + id).removeAttribute("hidden")
-                }
-            </script>
+
+            <%#JS handler function to hide/unhide elements.%>
+                <script>
+                    function handler(id) {
+                        document.getElementById("edit" + id).setAttribute("hidden", true)
+                        document.getElementById("done" + id).removeAttribute("hidden")
+                        document.getElementById("delete" + id).removeAttribute("hidden")
+                        document.getElementById("hiddenInputs" + id).removeAttribute("hidden")
+                        document.getElementById("title" + id).setAttribute("hidden", true)
+                        document.getElementById("recommendation" + id).setAttribute("hidden", true)
+                        document.getElementById("isbn" + id).setAttribute("hidden", true)
+                        document.getElementById("date" + id).setAttribute("hidden", true)
+                        document.getElementById("description" + id).setAttribute("hidden", true)
+                        document.getElementById("link" + id).setAttribute("hidden", true)
+                    }
+                </script>
 
 
-            <%- include('partials/footer.ejs'); -%>
+                <%- include('partials/footer.ejs'); -%>

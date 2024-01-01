@@ -51,8 +51,8 @@ app.post("/new", async (req, res) => {
 })
 
 app.post("/edit", async (req, res) => {
+    const id = req.body.itemId;
     const item = req.body.updatedItemTitle;
-    const id = req.body.updatedItemId;
     const recommendation = req.body.updatedItemRecommendation;
     const isbn = req.body.updatedIsbn;
     const readDate = req.body.updatedDate;
@@ -60,14 +60,82 @@ app.post("/edit", async (req, res) => {
     const link = req.body.updatedLink;
     try {
         await db.query("UPDATE book_archive SET title = ($1), recommendation = ($3), isbn = ($4), read_date = ($5), description = ($6), link = ($7)  WHERE id = $2",
-        [item, id, recommendation, isbn, readDate, description, link]);
+            [item, id, recommendation, isbn, readDate, description, link]);
         res.redirect("/");
     } catch (err) {
         console.log(err);
     }
-    console.log(typeof (recommendation))
 });
 
+app.post("/delete", async (req, res) => {
+    const id = req.body.itemId;
+    try {
+        await db.query("DELETE FROM book_archive WHERE id = $1", [id]);
+        res.redirect("/");
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get("/sortedByTitleAsc", async (req, res) => {
+    try {
+        const result = await db.query("SELECT * FROM book_archive ORDER BY title ASC");
+        books = result.rows;
+        res.render("index.ejs", {
+            listOfBooks: books
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get("/sortedByTitleDesc", async (req, res) => {
+    try {
+        const result = await db.query("SELECT * FROM book_archive ORDER BY title DESC");
+        books = result.rows;
+        res.render("index.ejs", {
+            listOfBooks: books
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get("/sortedByDateReadAsc", async (req, res) => {
+    try {
+        const result = await db.query("SELECT * FROM book_archive ORDER BY read_date ASC");
+        books = result.rows;
+        res.render("index.ejs", {
+            listOfBooks: books
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get("/sortedByDateReadDesc", async (req, res) => {
+    try {
+        const result = await db.query("SELECT * FROM book_archive ORDER BY read_date DESC");
+        books = result.rows;
+        res.render("index.ejs", {
+            listOfBooks: books
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get("/sortedByDateAdded", async (req, res) => {
+    try {
+        const result = await db.query("SELECT * FROM book_archive ORDER BY id DESC");
+        books = result.rows;
+        res.render("index.ejs", {
+            listOfBooks: books
+        });
+    } catch (err) {
+        console.log(err);
+    }
+});
 
 
 app.listen(port, () => {

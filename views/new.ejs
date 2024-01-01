@@ -11,19 +11,19 @@
 <body>
     <h1>Add a new book</h1>
 
-    <form action="/new" method="post">
+    <form action="/new" method="post" autocomplete="off">
         <p>What is the title of the book?</p>
         <input type="text" name="title">
         <p>How much would you recommend this book out of 10?</p>
         <select type="text" name="recommend">
-            <% for(let i=1; i<11; i++){ %>
+            <% for(let i=1; i<6; i++){ %>
                 <option value="<%=i%>">
                     <%=i%>
                 </option>
                 <% } %>
         </select>
         <p>When did you read this book?</p>
-        <input type="date" name="read_date">
+        <input type="date" name="read_date" id="todayDate">
         <p>Describe the book by your own words.</p>
         <input type="text" name="description">
         <p>Link to the book reviews from other people.</p>
@@ -32,4 +32,9 @@
         <input type="text" name="isbn">
         <button>Add</button>
     </form>
+
+    <%#Script to set date input to todays date automatically, but user can change it manually.%>
+        <script>
+            document.getElementById("todayDate").valueAsDate = new Date();
+        </script>
 </body>
